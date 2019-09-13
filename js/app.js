@@ -18,6 +18,23 @@ function inputErrMessage(element, errMsg, errMsgClass) {
     //focus on first text field "Name"
     $("#name").focus();
 
+    //Name field error 
+  const userName = document.getElementById('name');
+  let name = false;
+  userName.addEventListener('input', function(event){
+  
+      let $nameReg = new RegExp('^[A-Za-z]*\\s?[A-Za-z]+$');
+      const isValidName = $nameReg.test($('input#name').val())
+      if(isValidName){
+          $('input#name').css('color','black')
+          name = true;
+      } else {
+          $('input#name').css('color','red')
+      
+      }
+  
+  })
+// Job Field
 // in the job role section hiding the 'other' option that was added 
     let inputOther = document.getElementById("other-title");
     inputOther.style.display ="none";
@@ -35,6 +52,22 @@ function inputErrMessage(element, errMsg, errMsgClass) {
 
 //T-Shirt
 //no options are shown when page loads
+// remove select theme option
+//hides theme
+$('#design :first-child').hide(); 
+    $("#colors-js-puns").hide(); 
+    $('#color option').each((i) => $('#color option').eq(i).hide()); 
+    $('#color').prepend($('<option>').attr('selected', true).text('Please select a T-shirt theme'));
+// listens to change event
+    $('#design').on('change', () => {
+        $("#colors-js-puns").show();
+        $('#color option').each(function () {
+            if ($(this).attr('selected')) {
+                $(this).attr('selected', false);
+            }
+        });  
+    });
+    
 $("#color")
     .find("option")
     .remove();
@@ -117,9 +150,9 @@ jsLibraries.change(function () {
         node.parent().append();
         updateCost(100);
     } else {
-        nodeJS.prop("disabled", false);
-        nodeJS.parent().removeClass("disabled");
-        nodeJS.parent().find('.unavailable').remove();
+        node.prop("disabled", false);
+        node.parent().removeClass("disabled");
+        node.parent().find('.unavailable').remove();
         updateCost(-100);
     }
 });
@@ -154,7 +187,7 @@ node.change(function () {
     }
 });
 
-//
+//total
 $("input[name='build-tools']").change(function () {
     if ($(this).prop("checked")) {
         updateCost(100);
@@ -175,21 +208,6 @@ $("input[name='npm']").change(function () {
 $("#payment").ready(function() {
     $('select option:contains("Credit Card")').prop("selected", true);
   });
-
-//   //paypal and bitcoin
-//   const $paypal = $("#credit-card").next("div");
-//   const $bitcon = $("#credit-card")
-//     .next("div")
-//     .next("div");
-
-//     //hiding and showing 
-//     $("#payment").change(function() {
-//         if (this.value == "credit card") {
-//           $("#credit-card").show();
-//           $($paypal).hide();
-//         }
-//     });
-    
 
     //input can not be blank
     $("input[name=user_name]").on("input", function() {
@@ -242,7 +260,7 @@ $("#payment").ready(function() {
   });
 
 
-//credit-card
+//credit-card 
 function creditCardPayment() {                                                                          // Everything about the credit card payment section, and the zip code, and cvv code validations share the same logic as the name and the email validations, just with the proper id's for the relevent elements. 
         const creditCard = /\d{13,16}$/
         if (creditCard.test($('#credit').val())) {
@@ -285,22 +303,24 @@ $('#cvv').on('blur', () => {
 });
 
 //last call for functions
-$('form').on('submit', () => {
-    if ($('#payment').val() === 'credit card'){                                                                     // here I used a set of nested if statements that basically separate my validations to only validate the necessary fields that are necessary for the users preferred method of payment. 
-        if (userName() & userEmail() & userActivity() & creditCardPayment() & zipCode() & cvvCode()) {
-            return true;
-        } else {event.preventDefault(); // if the conditions are not met if the user chosese to pay with a credit card, then the page will not load. 
-        }
-    }  
-        if(($('#payment').val() === 'paypal' || 'bitcoin')){
-            if(userName() & userEmail() & userActivity()){
-                    return true
-                } else { 
-                    event.preventDefault();
+// $('form').on('submit', () => {
+//     if ($('#payment').val() === 'credit card'){ 
+//             //separating validations to allow the users to pick there payment.                                                                 
+//         if (userName() & userEmail() & userActivity() & creditCardPayment() & zipCode() & cvvCode()) {
+//             return true;
+//  // if === not met the user chosese to pay with a credit card, then the page will not load.           
+//         } else {event.preventDefault();  
+//         }
+//     }  
+//         if(($('#payment').val() === 'paypal' || 'bitcoin')){
+//             if(userName() & userEmail() & userActivity()){
+//                     return true
+//                 } else { 
+//                     event.preventDefault();
                 
-                }
-        }
-    });
+//                 }
+//         }
+//     });
 
     function isValidCreditCard() {
         const regex = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
@@ -334,16 +354,6 @@ $('form').on('submit', () => {
     }
   }
 
-//paypal
-
-
-
-
-
-
-
-
-
 
 //Email section
 function validateEmail(mail) {
@@ -362,3 +372,40 @@ function validateEmail(mail) {
         inputErrMessage($('#mail'), errMsg, 'mailMessage');
     }
   });
+  
+
+  // error indications on invalid fields.
+  const $button = $('button');
+  $button.on('click', function(event){
+      if($('input:checked').length === 0){
+          event.preventDefault();
+          $('.activities legend').css('color', 'red')
+          alert(`Please choose 1 activity.`)
+      }
+      if(name === false){
+          event.preventDefault();
+          $('fieldset legend').first().css('color', 'red');
+          alert(`Please enter a valid name`);
+      }  
+      if (mail === false){
+          event.preventDefault();
+          $('fieldset legend').first().css('color', 'red');
+          alert(`Please enter a valid email`);
+      } 
+       if (creditCardPayment === false){
+          event.preventDefault();
+          $('fieldset legend').last().css('color', 'red');
+          alert(`CreditCard must contain 13-16 digits`);
+      }
+       if (zipCode === false){
+          event.preventDefault();
+          $('fieldset legend').last().css('color', 'red');
+          alert(`Please enter 5 digit zipCode`);
+      }
+       if (cvvCode === false){
+          event.preventDefault();
+          $('fieldset legend').last().css('color', 'red');
+          alert(`Please enter a 3 digit cvvCode`);
+  
+      }
+  })
