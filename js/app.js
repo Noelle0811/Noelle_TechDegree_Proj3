@@ -253,10 +253,9 @@ $("#payment").ready(function() {
     }
   });
 
-
 //credit-card 
 function creditCardPayment() {                                                             
-        const creditCard = /\d{13,16}$/
+        const creditCard = /^[0-9]{13,16}$/       
         if (creditCard.test($('#cc-num').val())) {
             $('#cc-num').prev().text("Card Number:").css('color', 'black');
             return true;
@@ -270,7 +269,7 @@ function creditCardPayment() {
 
  //zip code
  function zipCode() {
-    const zipNum = /\d{5}$/
+    const zipNum = /^\d{5}$/       
     if (zipNum.test($('#zip').val())) {
         $('#zip').prev().text("Zip Code:").css('color', 'black');
         return true;
@@ -284,7 +283,7 @@ $('#zip').on('blur', () => {
 
 //cvv code
 function cvvCode() {
-    const cvvNum = /\d{3}$/
+    const cvvNum = /^\d{3}$/
     if (cvvNum.test($('#cvv').val())) {
         $('#cvv').prev().text("CVV:").css('color', 'black');
         return true;
@@ -295,26 +294,6 @@ function cvvCode() {
 $('#cvv').on('blur', () => {
     cvvCode();
 });
-
-//last call for functions
-// $('form').on('submit', () => {
-//     if ($('#payment').val() === 'credit card'){ 
-//             //separating validations to allow the users to pick there payment.                                                                 
-//         if (userName() & userEmail() & userActivity() & creditCardPayment() & zipCode() & cvvCode()) {
-//             return true;
-//  // if === not met the user chosese to pay with a credit card, then the page will not load.           
-//         } else {event.preventDefault();  
-//         }
-//     }  
-//         if(($('#payment').val() === 'paypal' || 'bitcoin')){
-//             if(userName() & userEmail() & userActivity()){
-//                     return true
-//                 } else { 
-//                     event.preventDefault();
-                
-//                 }
-//         }
-//     });
 
     function isValidCreditCard() {
         const regex = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
@@ -348,7 +327,6 @@ $('#cvv').on('blur', () => {
     }
   }
 
-
 //Email section
 function validateEmail(mail) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
@@ -367,7 +345,6 @@ function validateEmail(mail) {
     }
   });
   
-
   // error indications on invalid fields.
   const $button = $('button');
   $button.on('click', function(event){
