@@ -204,9 +204,12 @@ $("input[name='npm']").change(function () {
 });
 
 //payment Info 
-//the credit-card is the default 
+//the credit-card is the default when the page loads show CC and hide paypal and bitcoin
 $("#payment").ready(function() {
     $('select option:contains("Credit Card")').prop("selected", true);
+    $("#paypal").hide(); 
+    $("#bitcoin").hide();
+
   });
 
     //input can not be blank
@@ -228,15 +231,6 @@ $("#payment").ready(function() {
           $(".error-message").remove();
         }
     };
-
-//Payment Section
-//hiding the paypal and bitcoin div
-// $("#paypal").hide(); 
-//   $("#bitcoin").hide(); 
-//   $('#payment option[value="select method"]')
-//     .attr("disabled", true)
-//     .attr("selected", false); 
-//   $('#payment option[value="Credit Card"]').attr("selected", true);
 
   $("#payment").on("change", event => {
     const isSelected = event.target;
@@ -261,16 +255,16 @@ $("#payment").ready(function() {
 
 
 //credit-card 
-function creditCardPayment() {                                                                          // Everything about the credit card payment section, and the zip code, and cvv code validations share the same logic as the name and the email validations, just with the proper id's for the relevent elements. 
+function creditCardPayment() {                                                             
         const creditCard = /\d{13,16}$/
-        if (creditCard.test($('#credit').val())) {
-            $('#credit').prev().text("Name:").css('color', 'black');
+        if (creditCard.test($('#cc-num').val())) {
+            $('#cc-num').prev().text("Card Number:").css('color', 'black');
             return true;
         } else {
-            $('#credit').prev().text("Please enter a valid Name.").css('color', 'red');
+            $('#cc-num').prev().text("Please enter a valid Credit-Card number.").css('color', 'red');
         }
     }
-    $('#credit').on('blur', () => {
+    $('#cc-num').on('blur', () => {
         creditCardPayment();
     });
 
