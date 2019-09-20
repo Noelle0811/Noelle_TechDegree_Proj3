@@ -1,5 +1,10 @@
 console.log('Hello Noelle')
 
+
+
+
+
+
 //error messages
 function inputErrMessage(element, errMsg, errMsgClass) {
     element.css('border', '2px solid red');
@@ -21,7 +26,7 @@ function inputErrMessage(element, errMsg, errMsgClass) {
     //Name field error 
   const userName = document.getElementById('name');
   let name = false;
-  userName.addEventListener('input', function(event){
+  userName.addEventListener('input', function(){
   
       let $nameReg = new RegExp('^[A-Za-z]*\\s?[A-Za-z]+$');
       const isValidName = $nameReg.test($('input#name').val())
@@ -216,7 +221,7 @@ $("#payment").ready(function() {
     $("input[name=user_name]").on("input", function() {
         nameValidation();
       });
-     
+     //name valaidation
       function nameValidation() {
         const name = $("#name").val();
         if (name.length < 1) {
@@ -231,7 +236,7 @@ $("#payment").ready(function() {
           $(".error-message").remove();
         }
     };
-
+//payment info
   $("#payment").on("change", event => {
     const isSelected = event.target;
     const paymentMethod = isSelected.value; 
@@ -266,6 +271,7 @@ function creditCardPayment() {
     $('#cc-num').on('blur', () => {
         creditCardPayment();
     });
+    
 
  //zip code
  function zipCode() {
@@ -295,6 +301,7 @@ $('#cvv').on('blur', () => {
     cvvCode();
 });
 
+// validation cc
     function isValidCreditCard() {
         const regex = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
         const value = $(`#${id}`).val();
@@ -345,6 +352,7 @@ function validateEmail(mail) {
     }
   });
   
+  
   // error indications on invalid fields.
   const $button = $('button');
   $button.on('click', function(event){
@@ -358,25 +366,53 @@ function validateEmail(mail) {
           $('fieldset legend').first().css('color', 'red');
           alert(`Please enter a valid name`);
       }  
-      if (mail === false){
+      if (validateEmail() !== true) {
           event.preventDefault();
           $('fieldset legend').first().css('color', 'red');
           alert(`Please enter a valid email`);
       } 
-       if (creditCardPayment === false){
+      
+        //event.preventDefault();
+       if (creditCardPayment() !== true) {
           event.preventDefault();
           $('fieldset legend').last().css('color', 'red');
           alert(`CreditCard must contain 13-16 digits`);
-      }
-       if (zipCode === false){
-          event.preventDefault();
-          $('fieldset legend').last().css('color', 'red');
-          alert(`Please enter 5 digit zipCode`);
-      }
-       if (cvvCode === false){
-          event.preventDefault();
-          $('fieldset legend').last().css('color', 'red');
-          alert(`Please enter a 3 digit cvvCode`);
+        }
+        if (zipCode() !== true) {
+            event.preventDefault();
+            $('fieldset legend').last().css('color', 'red');
+            alert(`Please enter 5 digit zipCode`);
+        }
+         if (cvvCode() !== true) {
+            event.preventDefault();
+            $('fieldset legend').last().css('color', 'red');
+            alert(`Please enter a 3 digit cvvCode`);
+    
+        }
+    });
+       
+
+//submit add eventListener
+
+// const userCcNum = document.getElementById('name');
+//   let ('#cc-num') = false;
+//   userCcNum.addEventListener('input', function(){
   
-      }
-  })
+//       let $nameReg = new RegExp('^[A-Za-z]*\\s?[A-Za-z]+$');
+//       const isValidName = $nameReg.test($('input#cc-num').val())
+//       if(isValidPayment){
+//           $('input#cc-num').css('color','black')
+//           name = true;
+//       } else {
+//           $('input#cc-num').css('color','red')
+      
+//       }
+  
+//   })
+
+// document.getElementById("myBtn").addEventListener("click", '#cc-num');
+// element.addEventListener("click", myFunction);
+
+// function myFunction() {
+//   alert ("Hello World!");
+// }
