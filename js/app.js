@@ -1,10 +1,6 @@
 console.log('Hello Noelle')
 
 
-
-
-
-
 //error messages
 function inputErrMessage(element, errMsg, errMsgClass) {
     element.css('border', '2px solid red');
@@ -27,7 +23,6 @@ function inputErrMessage(element, errMsg, errMsgClass) {
   const userName = document.getElementById('name');
   let name = false;
   userName.addEventListener('input', function(){
-  
       let $nameReg = new RegExp('^[A-Za-z]*\\s?[A-Za-z]+$');
       const isValidName = $nameReg.test($('input#name').val())
       if(isValidName){
@@ -45,17 +40,17 @@ function inputErrMessage(element, errMsg, errMsgClass) {
     inputOther.style.display ="none";
 
 // when the 'other' is selected show the text feild 
-    $("#title").change(function(e) { 
+    $("#title").change(function(event) { 
         const selected = event.target.value;
         if (selected == "other") {
             $("#other-title").show();
         } else { 
-            $("other-title").hide();
+            $("#other-title").hide();
         }
     })
 
 
-//T-Shirt
+//T-Shirt 
 //no options are shown when page loads
 // remove select theme option
 //hides theme
@@ -113,7 +108,7 @@ $("#color")
       $("#design").change(toggleDropDown);
      
 
-//Activity Section
+//Activity Section 
 const jsFrameworks = $("input[name='js-frameworks'");
 const jsLibraries = $("input[name='js-libs']");
 const express = $("input[name='express']");
@@ -208,7 +203,7 @@ $("input[name='npm']").change(function () {
     }
 });
 
-//payment Info 
+// payment Info 
 //the credit-card is the default when the page loads show CC and hide paypal and bitcoin
 $("#payment").ready(function() {
     $('select option:contains("Credit Card")').prop("selected", true);
@@ -218,7 +213,8 @@ $("#payment").ready(function() {
   });
 
     //input can not be blank
-    $("input[name=user_name]").on("input", function() {
+    $("input[name='name']").on("input", function() {
+        console.log('working');
         nameValidation();
       });
      //name valaidation
@@ -294,7 +290,7 @@ function cvvCode() {
         $('#cvv').prev().text("CVV:").css('color', 'black');
         return true;
     } else {
-        $('#cvv').prev().text("Please enter a valid cvv code.").css('color', 'red');
+        $('#zip').prev().text("Zip Code:").css('color', 'black');
     }
 }
 $('#cvv').on('blur', () => {
@@ -335,15 +331,18 @@ $('#cvv').on('blur', () => {
   }
 
 //Email section
-function validateEmail(mail) {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
-        return (true);
-    } else {
-         return (false);
-    }
-  };
+function validateEmail() {
+    const email = /^[^@]+@[^@.]+\.[a-z]+$/
+        if (email.test($('#mail').val()) ) {
+     $('#mail').prev().text("Email:").css('color', 'black');
+         return true;
+        } else {
+         return false;
+        }
+    };
   
-  $('#mail').on('keyup', function(e) {
+  
+    $('#mail').on('keyup', function(e) {
     removeEmptyErrMsg($('.emptyMailMessage'), $('.mailMessage'), $('#mail'));
     //If invalid email address entered, you get error massage
         if (validateEmail($(e.target).prop('value')) === false) {
@@ -352,67 +351,88 @@ function validateEmail(mail) {
     }
   });
   
+
   
+//////////////
+///validation
+
+  function validateZipCode(num) {
+    if ((/^[0-9]{5}$/).test(num)) {
+      return (true);
+    } else {
+      return (false);
+    }
+  };
+  
+  $('#zip').on('keyup', function(event) {
+    removeEmptyErrMsg($('.emptyZipMessage'), $('.zipCodeMessage'), $('#zip'));
+    if (validateZipCode($(event.target).prop('value')) === false) {
+      const errMsg = '<p>Please enter a number that is 5 digits long.</p>';
+      inputErrMessage($('#zip'), errMsg, 'zipCodeMessage');
+    }
+  });
+  
+  //Validate CVV
+  function validateCVV(num) {
+    if ((/^[0-9]{3}$/).test(num)) {
+      return (true);
+    } else {
+      return (false);
+    }
+  };
+  
+  $('#cvv').on('keyup', function(e) {
+    removeEmptyErrMsg($('.emptyCVVMessage'), $('.CVVMessage'), $('#cvv'));
+    if (validateCVV($(e.target).prop('value')) === false) {
+      const errMsg = '<p>Please enter a number that is 3 digits long.</p>';
+      inputErrMessage($('#cvv'), errMsg, 'CVVMessage');
+    }
+  });
+  
+
   // error indications on invalid fields.
   const $button = $('button');
-  $button.on('click', function(event){
-      if($('input:checked').length === 0){
-          event.preventDefault();
-          $('.activities legend').css('color', 'red')
-          alert(`Please choose 1 activity.`)
-      }
-      if(name === false){
+  $button.on('click', function(event) {
+      
+    if(name !== true){
           event.preventDefault();
           $('fieldset legend').first().css('color', 'red');
           alert(`Please enter a valid name`);
       }  
+    
+    if($('input:checked').length === 0){
+          event.preventDefault();
+          $('.activities legend').css('color', 'red')
+          alert(`Please choose 1 activity.`)
+      }
+
       if (validateEmail() !== true) {
           event.preventDefault();
           $('fieldset legend').first().css('color', 'red');
           alert(`Please enter a valid email`);
       } 
-      
-        //event.preventDefault();
-       if (creditCardPayment() !== true) {
+
+      if ($('#payment option')[1].selected) {  
+        
+        if (creditCardPayment() !== true) {
           event.preventDefault();
           $('fieldset legend').last().css('color', 'red');
           alert(`CreditCard must contain 13-16 digits`);
         }
+        
         if (zipCode() !== true) {
             event.preventDefault();
             $('fieldset legend').last().css('color', 'red');
             alert(`Please enter 5 digit zipCode`);
         }
-         if (cvvCode() !== true) {
+         
+        if (cvvCode() !== true) {
             event.preventDefault();
             $('fieldset legend').last().css('color', 'red');
             alert(`Please enter a 3 digit cvvCode`);
     
         }
-    });
+    
+    }
        
-
-//submit add eventListener
-
-// const userCcNum = document.getElementById('name');
-//   let ('#cc-num') = false;
-//   userCcNum.addEventListener('input', function(){
-  
-//       let $nameReg = new RegExp('^[A-Za-z]*\\s?[A-Za-z]+$');
-//       const isValidName = $nameReg.test($('input#cc-num').val())
-//       if(isValidPayment){
-//           $('input#cc-num').css('color','black')
-//           name = true;
-//       } else {
-//           $('input#cc-num').css('color','red')
-      
-//       }
-  
-//   })
-
-// document.getElementById("myBtn").addEventListener("click", '#cc-num');
-// element.addEventListener("click", myFunction);
-
-// function myFunction() {
-//   alert ("Hello World!");
-// }
+    });
